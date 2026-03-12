@@ -1,0 +1,59 @@
+Comandos utilizados, práctica laboratorio 6.2: Seguridad en Linux.
+
+IP TABLES - FIREWALL-CMD
+
+============================================
+
+
+# Detener firewalld para usar iptables
+sudo systemctl stop firewalld
+
+# Instalar los tres servicios a utilizar (HTTP, FTP, SSH)
+sudo dnf install httpd vsftpd openssh-server -y
+
+# Iniciar y habilitar los tres servicios:
+sudo systemctl start httpd vsftpd sshd
+sudo systemctl enable httpd vsftpd sshd
+
+# Verificar servicios:
+systemctl status httpd
+systemctl status vsftpd
+systemctl status sshd
+
+# IPTABLES - Permitir tráfico
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT   
+sudo iptables -A INPUT -p tcp --dport 21 -j ACCEPT   
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT   
+
+# IPTABLES - Bloquear tráfico
+sudo iptables -D INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -D INPUT -p tcp --dport 21 -j ACCEPT
+sudo iptables -D INPUT -p tcp --dport 22 -j ACCEPT
+
+sudo iptables -A INPUT -p tcp --dport 80 -j REJECT
+sudo iptables -A INPUT -p tcp --dport 21 -j REJECT
+sudo iptables -A INPUT -p tcp --dport 22 -j REJECT
+
+# IPTABLES - Volver a permitir tráfico
+sudo iptables -D INPUT -p tcp --dport 80 -j REJECT
+sudo iptables -D INPUT -p tcp --dport 21 -j REJECT
+sudo iptables -D INPUT -p tcp --dport 22 -j REJECT
+
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 21 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# FIREWALLD - Iniciar servicio
+sudo systemctl start firewalld
+
+# FIREWALLD - Bloquear tráfico
+sudo firewall-cmd --permanent --remove-service=http
+sudo firewall-cmd --permanent --remove-service=ftp
+sudo firewall-cmd --permanent --remove-service=ssh
+sudo firewall-cmd --reload
+
+# FIREWALLD - Permitir tráfico nuevamente
+sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --permanent --add-service=ftp
+sudo firewall-cmd --permanent --add-service=ssh
+sudo firewall-cmd --reload
