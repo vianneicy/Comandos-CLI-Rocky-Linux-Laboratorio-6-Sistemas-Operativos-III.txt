@@ -1,0 +1,29 @@
+Comandos utilizados, práctica laboratorio 6.1: Seguridad en Linux.
+
+CIFRADO GPG.
+
+============================================
+
+
+#Instalación de la herramienta GPG2:
+sudo dnf install gnupg2 -y
+
+#Nos ubicamos en el escritorio para crear un nuevo archivo de texto, el que vamos a cifrar posteriormente:
+cd ./Desktop
+echo "Hola" > archivo.txt
+
+#Verificamos la existencia del archivo:
+ls -l
+cat archivo.txt
+
+# Ciframos el archivo 'archivo' de forma simétrica usando GPG2 (El sistema pedirá una contraseña para cifrar. Se debe escribir dos veces. Esto generará un nuevo archivo: 'archivo.txt.gpg')
+gpg2 -c archivo
+
+# Verificamos que el archivo cifrado fue creado correctamente (Aquí veremos tanto el archivo original como el cifrado: 'archivo.txt' y 'archivo.txt.gpg')
+ls
+
+# Intentamos leer el archivo cifrado con 'cat' (no será legible para humanos)
+cat archivo.gpg
+
+# Desciframos el archivo cifrado para ver su contenido original (Se nos pedirá la misma contraseña que usamos al cifrar. Una vez ingresada, veremos el texto original en pantalla)
+gpg2 -d archivo.txt.gpg
